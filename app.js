@@ -1,4 +1,4 @@
-const curriculum = window.CURRICULUM;
+﻿const curriculum = window.CURRICULUM;
 const verbData = window.VERB_DATA || {};
 const storageKey = "nyelv-edzo-state-v1";
 const builtInDictionary = [
@@ -84,6 +84,11 @@ const defaultState = {
   attempts: 0,
   correct: 0,
   skipped: 0,
+  settings: {
+    dailyWords: 8,
+    sound: "on",
+    density: "normal"
+  },
   currentLessonId: "",
   currentStep: 0,
   selectedAnswer: "",
@@ -121,6 +126,10 @@ const elements = {
   accuracyMobile: document.querySelector("#accuracy-count-mobile"),
   known: document.querySelector("#known-count"),
   profileSummary: document.querySelector("#profile-summary"),
+  sentenceBoard: document.querySelector("#sentence-board"),
+  dailyWordTarget: document.querySelector("#daily-word-target"),
+  soundEnabled: document.querySelector("#sound-enabled"),
+  lessonDensity: document.querySelector("#lesson-density"),
   nextLevel: document.querySelector("#next-level"),
   verbInput: document.querySelector("#verb-input"),
   verbSearch: document.querySelector("#verb-search"),
@@ -129,7 +138,12 @@ const elements = {
 
 function loadState() {
   try {
-    return { ...defaultState, ...JSON.parse(localStorage.getItem(storageKey)) };
+    const stored = JSON.parse(localStorage.getItem(storageKey));
+    return {
+      ...defaultState,
+      ...stored,
+      settings: { ...defaultState.settings, ...(stored?.settings || {}) }
+    };
   } catch {
     return { ...defaultState };
   }
@@ -177,18 +191,33 @@ function currentLesson() {
 }
 
 function learningItemsForLesson(lesson) {
-  const limit = lesson.id === "free-practice" ? 6 : newWordsPerLesson;
+  const limit = lesson.id === "free-practice" ? 6 : Number(state.settings?.dailyWords || newWordsPerLesson);
   return lesson.items.slice(0, limit);
 }
 
 function sentenceForItem(item) {
+  if (state.level === "a1") {
+    return {
+      target: state.language === "es" ? `Tengo ${item.term}` : `I have ${item.term}`,
+      meaning: `Van nálam: ${item.meaning}`,
+      words: state.language === "es" ? ["Tengo", item.term] : ["I", "have", item.term]
+    };
+  }
+  if (state.level === "a2") {
+    return {
+      target: state.language === "es" ? `Necesito ${item.term} hoy` : `I need ${item.term} today`,
+      meaning: `Ma szükségem van erre: ${item.meaning}`,
+      words: state.language === "es" ? ["Necesito", item.term, "hoy"] : ["I", "need", item.term, "today"]
+    };
+  }
   return {
-    target: `I use ${item.term}`,
-    meaning: `Használom: ${item.meaning}`,
-    words: ["I", "use", item.term]
+    target: state.language === "es" ? `Quiero usar ${item.term} en una frase` : `I want to use ${item.term} in a sentence`,
+    meaning: `Mondatban akarom használni: ${item.meaning}`,
+    words: state.language === "es"
+      ? ["Quiero", "usar", item.term, "en", "una", "frase"]
+      : ["I", "want", "to", "use", item.term, "in", "a", "sentence"]
   };
 }
-
 function lessonSteps(lesson) {
   const items = learningItemsForLesson(lesson);
   const learn = items.map((item) => ({ type: "learn", ...item }));
@@ -219,7 +248,15 @@ function lessonSteps(lesson) {
     answer: item.term,
     options: optionsFrom(items.map((row) => row.term), index)
   }));
-  return [...learn, ...recognition, ...builds, ...inputs, ...review];
+  const extraReview = state.settings?.density === "dense"
+    ? items.slice(0, 3).map((item, index) => ({
+      type: "choice",
+      prompt: `Még egyszer: ${item.term}`,
+      answer: item.meaning,
+      options: optionsFrom(items.map((row) => row.meaning), index)
+    }))
+    : [];
+  return [...learn, ...recognition, ...builds, ...inputs, ...review, ...extraReview];
 }
 function currentSteps() {
   return lessonSteps(currentLesson());
@@ -352,6 +389,63 @@ function renderReview() {
   elements.wordList.appendChild(fragment);
 }
 
+function sentenceRows() {
+  const rows = [];
+  activeLessons().forEach((lesson) => {
+    (lesson.sentences || []).forEach((sentence) => {
+      rows.push({ ...sentence, lessonTitle: lesson.title });
+    });
+    lesson.items.slice(0, 3).forEach((item) => {
+      rows.push({ ...sentenceForItem(item), lessonTitle: lesson.title });
+    });
+  });
+  return rows.slice(0, 60);
+}
+
+function renderSentences() {
+  if (!elements.sentenceBoard) return;
+  elements.sentenceBoard.innerHTML = "";
+  const fragment = document.createDocumentFragment();
+  sentenceRows().forEach((sentence) => {
+    const card = document.createElement("article");
+    card.className = "sentence-card";
+    card.innerHTML = `
+      <div>
+        <span>${escapeHtml(sentence.lessonTitle)}</span>
+        <strong>${escapeHtml(sentence.meaning)}</strong>
+        <p>${escapeHtml(sentence.target)}</p>
+      </div>
+      <div class="sentence-actions">
+        <button class="icon-button sentence-sound" type="button" aria-label="Meghallgatás">▶</button>
+        <button class="secondary-button sentence-start" type="button">Gyakorlás</button>
+      </div>
+    `;
+    card.querySelector(".sentence-sound").addEventListener("click", () => speak(sentence.target));
+    card.querySelector(".sentence-start").addEventListener("click", () => startSentencePractice(sentence));
+    fragment.appendChild(card);
+  });
+  elements.sentenceBoard.appendChild(fragment);
+}
+
+function startSentencePractice(sentence) {
+  state.freeLesson = {
+    id: "free-practice",
+    title: "Mondatgyakorlás",
+    icon: "MO",
+    summary: "mondatépítés",
+    items: [],
+    sentences: [sentence]
+  };
+  state.currentLessonId = "__free__";
+  state.currentStep = 0;
+  state.selectedAnswer = "";
+  state.sentenceAnswer = [];
+  saveState();
+  renderTask();
+  showScreen("lesson-screen");
+  elements.screenTitle.textContent = "Mondatok";
+}
+
 function dictionaryGroups() {
   const groups = new Map();
 
@@ -392,17 +486,40 @@ function showScreen(screenId) {
   document.querySelectorAll(".screen").forEach((screen) => screen.classList.remove("active"));
   document.querySelector(`#${screenId}`).classList.add("active");
   if (screenId === "review-screen" && !dictionaryRendered) renderReview();
+  if (screenId === "sentences-screen") renderSentences();
+  if (screenId === "settings-screen") renderSettings();
   document.querySelectorAll(".nav-button").forEach((button) => {
     const label = button.getAttribute("aria-label");
-    const primary = screenId === "home-screen" ? "Tanulás" : screenId === "review-screen" ? "Szavak" : "Statisztika";
+    const primary = {
+      "home-screen": "Tanulás",
+      "review-screen": "Szavak",
+      "sentences-screen": "Mondatok",
+      "profile-screen": "Statisztika",
+      "settings-screen": "Beállítások"
+    }[screenId];
     button.classList.toggle("active", button.dataset.screen === screenId && label === primary);
   });
   elements.screenTitle.textContent = {
     "home-screen": "Mai pálya",
     "review-screen": "Szavak",
-    "profile-screen": "Profil"
+    "sentences-screen": "Mondatok",
+    "profile-screen": "Profil",
+    "settings-screen": "Beállítások"
   }[screenId] || "Lecke";
   updateStats();
+}
+
+function renderSettings() {
+  if (!elements.dailyWordTarget) return;
+  elements.dailyWordTarget.value = String(state.settings?.dailyWords || 8);
+  elements.soundEnabled.value = state.settings?.sound || "on";
+  elements.lessonDensity.value = state.settings?.density || "normal";
+}
+
+function updateSetting(key, value) {
+  state.settings = { ...defaultState.settings, ...(state.settings || {}), [key]: value };
+  saveState();
+  refresh();
 }
 
 function startLesson(id) {
@@ -618,6 +735,7 @@ function speak(text) {
 }
 
 function speakIn(text, languageId) {
+  if (state.settings?.sound === "off") return;
   if (!("speechSynthesis" in window)) return;
   const spokenText = String(text).split(" / ")[0];
   const utterance = new SpeechSynthesisUtterance(spokenText);
@@ -1181,12 +1299,16 @@ elements.nextLevel.addEventListener("click", () => {
   showScreen("home-screen");
 });
 document.querySelector("#reset-progress").addEventListener("click", () => {
-  const { language, level } = state;
-  state = { ...defaultState, language, level };
+  const { language, level, settings } = state;
+  state = { ...defaultState, language, level, settings };
   saveState();
   refresh();
 });
 document.querySelector("#shuffle-review").addEventListener("click", renderReview);
+document.querySelector("#refresh-sentences").addEventListener("click", renderSentences);
+elements.dailyWordTarget.addEventListener("change", () => updateSetting("dailyWords", Number(elements.dailyWordTarget.value)));
+elements.soundEnabled.addEventListener("change", () => updateSetting("sound", elements.soundEnabled.value));
+elements.lessonDensity.addEventListener("change", () => updateSetting("density", elements.lessonDensity.value));
 elements.wordList.addEventListener("click", (event) => {
   const button = event.target.closest(".dict-sound");
   if (!button) return;
@@ -1202,3 +1324,4 @@ if ("serviceWorker" in navigator) {
 }
 
 refresh();
+

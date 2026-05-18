@@ -980,6 +980,76 @@ p {
   max-width: 960px;
 }
 
+.sentence-board,
+.settings-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.sentence-card,
+.setting-card {
+  display: grid;
+  gap: 14px;
+  align-items: center;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(16, 32, 55, 0.9), rgba(10, 22, 40, 0.9));
+  box-shadow: var(--shadow);
+}
+
+.sentence-card {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.sentence-card span,
+.setting-card span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.sentence-card strong {
+  display: block;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+.sentence-card p {
+  margin: 6px 0 0;
+  color: #65e6ff;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.sentence-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-shell {
+  max-width: 960px;
+}
+
+.settings-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.setting-card select {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(123, 176, 255, 0.22);
+  border-radius: 8px;
+  background: #0b1728;
+  color: var(--text);
+  font-weight: 900;
+}
+
 @media (min-width: 1180px) {
   .content-stage {
     padding-right: 40px;
@@ -1066,7 +1136,9 @@ p {
   .course-strip,
   .control-row,
   .lesson-actions,
-  .stats-grid {
+  .stats-grid,
+  .sentence-card,
+  .settings-grid {
     grid-template-columns: 1fr;
   }
 

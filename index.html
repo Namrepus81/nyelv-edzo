@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
@@ -9,7 +9,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=35">
+  <link rel="stylesheet" href="styles.css?v=36">
 </head>
 <body>
   <div class="app-shell">
@@ -32,7 +32,7 @@
           <span aria-hidden="true">Aa</span>
           <small>Szavak</small>
         </button>
-        <button class="nav-button" type="button" data-screen="home-screen" aria-label="Mondatok">
+        <button class="nav-button" type="button" data-screen="sentences-screen" aria-label="Mondatok">
           <span aria-hidden="true">▥</span>
           <small>Mondatok</small>
         </button>
@@ -44,7 +44,7 @@
           <span aria-hidden="true">▮</span>
           <small>Statisztika</small>
         </button>
-        <button class="nav-button" type="button" data-screen="profile-screen" aria-label="Beállítások">
+        <button class="nav-button" type="button" data-screen="settings-screen" aria-label="Beállítások">
           <span aria-hidden="true">⚙</span>
           <small>Beállítások</small>
         </button>
@@ -199,6 +199,19 @@
           </div>
         </section>
 
+        <section class="screen" id="sentences-screen" aria-labelledby="sentences-heading">
+          <div class="review-shell">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Mondatok</p>
+                <h1 id="sentences-heading">Mondatgyakorlás</h1>
+              </div>
+              <button class="text-button" id="refresh-sentences" type="button">Frissítés</button>
+            </div>
+            <div class="sentence-board" id="sentence-board"></div>
+          </div>
+        </section>
+
         <section class="screen" id="profile-screen" aria-labelledby="profile-heading">
           <div class="profile-hero">
             <div class="badge-mark">Nox</div>
@@ -223,13 +236,49 @@
             </div>
           </div>
         </section>
+
+        <section class="screen" id="settings-screen" aria-labelledby="settings-heading">
+          <div class="settings-shell">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Beállítások</p>
+                <h1 id="settings-heading">Tanulási ritmus</h1>
+              </div>
+            </div>
+            <div class="settings-grid">
+              <label class="setting-card">
+                <span>Napi új szavak</span>
+                <select id="daily-word-target">
+                  <option value="5">5 szó</option>
+                  <option value="8">8 szó</option>
+                  <option value="10">10 szó</option>
+                </select>
+              </label>
+              <label class="setting-card">
+                <span>Hang</span>
+                <select id="sound-enabled">
+                  <option value="on">Bekapcsolva</option>
+                  <option value="off">Kikapcsolva</option>
+                </select>
+              </label>
+              <label class="setting-card">
+                <span>Lecke tempó</span>
+                <select id="lesson-density">
+                  <option value="normal">Normál</option>
+                  <option value="dense">Több ismétlés</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   </div>
 
-  <script src="curriculum.js?v=35"></script>
-  <script src="verb-data.js?v=35"></script>
-  <script src="dictionary-data.js?v=35"></script>
-  <script src="app.js?v=35"></script>
+  <script src="curriculum.js?v=36"></script>
+  <script src="verb-data.js?v=36"></script>
+  <script src="dictionary-data.js?v=36"></script>
+  <script src="app.js?v=36"></script>
 </body>
 </html>
+
