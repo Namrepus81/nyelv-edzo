@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="Telefonra telepíthető nyelvtanuló miniapp angol és spanyol leckékkel.">
+  <title>Nyelv Edző</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css?v=35">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Fő navigáció">
+      <div class="brand-lockup">
+        <div class="brand-bubbles" aria-hidden="true">
+          <span>AI</span>
+          <span>ñ</span>
+        </div>
+        <strong>Igeragozás</strong>
+        <small>Angol + Spanyol</small>
+      </div>
+
+      <nav class="side-nav">
+        <button class="nav-button active" type="button" data-screen="home-screen" aria-label="Tanulás">
+          <span aria-hidden="true">▣</span>
+          <small>Tanulás</small>
+        </button>
+        <button class="nav-button" type="button" data-screen="review-screen" aria-label="Szavak">
+          <span aria-hidden="true">Aa</span>
+          <small>Szavak</small>
+        </button>
+        <button class="nav-button" type="button" data-screen="home-screen" aria-label="Mondatok">
+          <span aria-hidden="true">▥</span>
+          <small>Mondatok</small>
+        </button>
+        <button class="nav-button" type="button" data-screen="home-screen" aria-label="Igeragozás">
+          <span aria-hidden="true">abc</span>
+          <small>Igeragozás</small>
+        </button>
+        <button class="nav-button" type="button" data-screen="profile-screen" aria-label="Statisztika">
+          <span aria-hidden="true">▮</span>
+          <small>Statisztika</small>
+        </button>
+        <button class="nav-button" type="button" data-screen="profile-screen" aria-label="Beállítások">
+          <span aria-hidden="true">⚙</span>
+          <small>Beállítások</small>
+        </button>
+      </nav>
+    </aside>
+
+    <div class="app-main">
+      <header class="topbar" aria-label="Haladás">
+        <button class="back-link" id="back-home" type="button" aria-label="Vissza a leckékhez">‹ <span>Vissza</span></button>
+        <div class="top-progress">
+          <span id="screen-title">Mai pálya</span>
+          <div class="top-progress-track" aria-label="Teljes haladás"><span id="lesson-progress-bar"></span></div>
+        </div>
+        <div class="status-pills" aria-label="Pontok és sorozat">
+          <span class="pill" title="Napi sorozat">🔥 <strong id="streak-count">0</strong> nap streak</span>
+          <span class="pill" title="Összpont">XP <strong id="xp-count">0</strong></span>
+          <span class="profile-pill">Nox</span>
+        </div>
+      </header>
+
+      <main class="content-stage">
+        <section class="screen active" id="home-screen" aria-labelledby="home-heading">
+          <div class="workspace-grid">
+            <div class="primary-column">
+              <div class="hero-panel">
+                <p class="eyebrow" id="app-name">Angol Edző</p>
+                <h1 id="home-heading">10 perc angol, pánik nélkül</h1>
+                <p id="daily-note">Rövid feladatok, tanító kártyák, aztán gyakorlás. A napi cél csak visszajelzés, nem zárja le a továbbhaladást.</p>
+                <div class="daily-progress">
+                  <span id="today-progress">0%</span>
+                  <small>mai haladás</small>
+                </div>
+              </div>
+
+              <div class="control-row" aria-label="Nyelv és szint választás">
+                <label>
+                  <span>Nyelv</span>
+                  <select id="language-select">
+                    <option value="en">Angol</option>
+                    <option value="es">Spanyol</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Szint</span>
+                  <select id="level-select"></select>
+                </label>
+              </div>
+
+              <div class="course-strip">
+                <p class="course-info" id="course-info">Betöltés...</p>
+                <div class="quick-actions">
+                  <button class="secondary-button" id="free-practice" type="button">Új feladat</button>
+                  <button class="secondary-button" id="next-level" type="button">Következő szint</button>
+                </div>
+              </div>
+
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Tanulási út</p>
+                  <h2>Leckeút</h2>
+                </div>
+                <button class="text-button" id="reset-progress" type="button">Újrakezdés</button>
+              </div>
+              <div class="lesson-path" id="lesson-path" aria-label="Elérhető leckék"></div>
+            </div>
+
+            <aside class="side-column">
+              <section class="helper-card">
+                <h2>Hogyan működik?</h2>
+                <ol>
+                  <li>Előbb magyar jelentés és tanító kártya.</li>
+                  <li>Utána felismerés, mondatépítés, gépelés.</li>
+                  <li>A szókereső fordít, igénél ragoz is.</li>
+                </ol>
+              </section>
+
+              <section class="verb-panel" aria-labelledby="verb-heading">
+                <div class="section-head">
+                  <div>
+                    <p class="eyebrow">Szó- és igeidő kereső</p>
+                    <h2 id="verb-heading">Írj be egy szót</h2>
+                  </div>
+                </div>
+                <div class="verb-search">
+                  <input id="verb-input" type="text" autocomplete="off" placeholder="pl. láb, go, tener">
+                  <button class="primary-button" id="verb-search" type="button">Keresés</button>
+                </div>
+                <div class="verb-result" id="verb-result" aria-live="polite">
+                  Fordítok magyarra, angolra és spanyolra. Igénél jön az igeidő tábla is.
+                </div>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="screen" id="lesson-screen" aria-labelledby="lesson-title">
+          <div class="lesson-workspace">
+            <div class="lesson-card">
+              <div class="lesson-meta">
+                <div>
+                  <p class="eyebrow" id="lesson-level">Kezdő</p>
+                  <h1 id="lesson-title">Köszönések</h1>
+                </div>
+              </div>
+              <div class="prompt-block">
+                <p class="task-type" id="task-type">Válaszd ki</p>
+                <h3 id="task-prompt">Mit jelent?</h3>
+                <button class="sound-button" id="speak-task" type="button">▶ Hallgasd meg</button>
+              </div>
+              <div class="answer-area" id="answer-area"></div>
+              <div class="feedback" id="feedback" aria-live="polite"></div>
+              <div class="lesson-actions">
+                <button class="secondary-button" id="skip-task" type="button">Kihagyás</button>
+                <button class="primary-button" id="check-answer" type="button">Ellenőrzés</button>
+              </div>
+            </div>
+
+            <aside class="lesson-side">
+              <section class="helper-card">
+                <h2>Feladat ritmus</h2>
+                <ol>
+                  <li>Tanulókártya: előbb látod a szót.</li>
+                  <li>Választás: felismered a jelentést.</li>
+                  <li>Mondatépítés: szavakból rakod össze.</li>
+                  <li>Gépelés: csak ezután kér beírást.</li>
+                </ol>
+              </section>
+              <section class="mini-stats">
+                <div>
+                  <strong id="completed-count">0</strong>
+                  <span>befejezett lecke</span>
+                </div>
+                <div>
+                  <strong id="accuracy-count">0%</strong>
+                  <span>pontosság</span>
+                </div>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="screen" id="review-screen" aria-labelledby="review-heading">
+          <div class="review-shell">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Ismétlés</p>
+                <h1 id="review-heading">Szótár</h1>
+              </div>
+              <button class="text-button" id="shuffle-review" type="button">Frissítés</button>
+            </div>
+            <div class="word-list" id="word-list"></div>
+          </div>
+        </section>
+
+        <section class="screen" id="profile-screen" aria-labelledby="profile-heading">
+          <div class="profile-hero">
+            <div class="badge-mark">Nox</div>
+            <div>
+              <p class="eyebrow">Profil</p>
+              <h1 id="profile-heading">A tempód számít</h1>
+              <p id="profile-summary">Kezdj el egy leckét, és itt látod majd a haladásod.</p>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <div>
+              <strong id="known-count">0</strong>
+              <span>tanult szó</span>
+            </div>
+            <div>
+              <strong id="completed-count-mobile">0</strong>
+              <span>befejezett lecke</span>
+            </div>
+            <div>
+              <strong id="accuracy-count-mobile">0%</strong>
+              <span>pontosság</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="curriculum.js?v=35"></script>
+  <script src="verb-data.js?v=35"></script>
+  <script src="dictionary-data.js?v=35"></script>
+  <script src="app.js?v=35"></script>
+</body>
+</html>

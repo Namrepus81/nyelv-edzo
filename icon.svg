@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Angol Edző ikon">
+  <rect width="512" height="512" rx="112" fill="#19a974"/>
+  <path d="M112 328c42 54 89 81 144 81s102-27 144-81" fill="none" stroke="#ffffff" stroke-width="34" stroke-linecap="round"/>
+  <rect x="116" y="118" width="280" height="176" rx="44" fill="#ffffff"/>
+  <path d="M166 246l38-88h32l38 88h-31l-7-18h-36l-7 18h-27zm43-43h18l-9-27-9 27zm85 43v-88h72v25h-42v9h38v23h-38v31h-30z" fill="#17212b"/>
+  <circle cx="402" cy="122" r="34" fill="#f4c542"/>
+  <path d="M384 122h36M402 104v36" stroke="#17212b" stroke-width="10" stroke-linecap="round"/>
+</svg>
