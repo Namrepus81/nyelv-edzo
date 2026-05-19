@@ -1,6 +1,11 @@
 ﻿const curriculum = window.CURRICULUM;
 const verbData = window.VERB_DATA || {};
 const storageKey = "nyelv-edzo-state-v1";
+const displayLanguages = {
+  en: { label: "Angol", speakLang: "en-US" },
+  es: { label: "Spanyol", speakLang: "es-ES" },
+  de: { label: "N\u00e9met", speakLang: "de-DE" }
+};
 const builtInDictionary = [
   { hu: "fej", en: "head", es: "cabeza" },
   { hu: "arc", en: "face", es: "cara" },
@@ -40,7 +45,233 @@ const builtInDictionary = [
   { hu: "enni", en: "eat", es: "comer", type: "verb" },
   { hu: "inni", en: "drink", es: "beber", type: "verb" }
 ];
-const quickDictionary = [...(window.DICTIONARY_DATA || []), ...builtInDictionary];
+const germanByHu = {
+  "fej": "der Kopf",
+  "arc": "das Gesicht",
+  "szem": "das Auge",
+  "k\u00e9z": "die Hand",
+  "kar": "der Arm",
+  "l\u00e1b": "das Bein",
+  "l\u00e1bfej": "der Fu\u00df",
+  "f\u00fcl": "das Ohr",
+  "orr": "die Nase",
+  "sz\u00e1j": "der Mund",
+  "fog": "der Zahn",
+  "haj": "das Haar",
+  "h\u00e1t": "der R\u00fccken",
+  "has": "der Bauch",
+  "sz\u00edv": "das Herz",
+  "ember": "die Person",
+  "bar\u00e1t": "der Freund",
+  "csal\u00e1d": "die Familie",
+  "gyerek": "das Kind",
+  "tan\u00e1r": "der Lehrer",
+  "di\u00e1k": "der Sch\u00fcler",
+  "orvos": "der Arzt",
+  "sof\u0151r": "der Fahrer",
+  "v\u00e1s\u00e1rl\u00f3": "der Kunde",
+  "f\u00e9rfi": "der Mann",
+  "n\u0151": "die Frau",
+  "l\u00e1ny": "das M\u00e4dchen",
+  "fi\u00fa": "der Junge",
+  "anya": "die Mutter",
+  "apa": "der Vater",
+  "l\u00e1nytestv\u00e9r": "die Schwester",
+  "fi\u00fatestv\u00e9r": "der Bruder",
+  "kutya": "der Hund",
+  "macska": "die Katze",
+  "mad\u00e1r": "der Vogel",
+  "hal": "der Fisch",
+  "l\u00f3": "das Pferd",
+  "teh\u00e9n": "die Kuh",
+  "diszn\u00f3": "das Schwein",
+  "alma": "der Apfel",
+  "keny\u00e9r": "das Brot",
+  "v\u00edz": "das Wasser",
+  "\u00e9tel": "das Essen",
+  "k\u00e1v\u00e9": "der Kaffee",
+  "tea": "der Tee",
+  "leves": "die Suppe",
+  "rizs": "der Reis",
+  "h\u00fas": "das Fleisch",
+  "sajt": "der K\u00e4se",
+  "h\u00e1z": "das Haus",
+  "lak\u00e1s": "die Wohnung",
+  "konyha": "die K\u00fcche",
+  "f\u00fcrd\u0151szoba": "das Badezimmer",
+  "\u00e1gy": "das Bett",
+  "l\u00e1mpa": "die Lampe",
+  "szoba": "das Zimmer",
+  "ajt\u00f3": "die T\u00fcr",
+  "ablak": "das Fenster",
+  "asztal": "der Tisch",
+  "sz\u00e9k": "der Stuhl",
+  "k\u00f6nyv": "das Buch",
+  "f\u00fczet": "das Heft",
+  "ceruza": "der Bleistift",
+  "t\u00e1ska": "die Tasche",
+  "kulcs": "der Schl\u00fcssel",
+  "ruha": "die Kleidung",
+  "cip\u0151": "der Schuh",
+  "kab\u00e1t": "der Mantel",
+  "nadr\u00e1g": "die Hose",
+  "p\u00f3l\u00f3": "das T-Shirt",
+  "aut\u00f3": "das Auto",
+  "busz": "der Bus",
+  "vonat": "der Zug",
+  "rep\u00fcl\u0151": "das Flugzeug",
+  "jegy": "die Fahrkarte",
+  "t\u00e9rk\u00e9p": "die Karte",
+  "utca": "die Stra\u00dfe",
+  "\u00fat": "die Stra\u00dfe",
+  "park": "der Park",
+  "h\u00edd": "die Br\u00fccke",
+  "bank": "die Bank",
+  "posta": "die Post",
+  "k\u00f3rh\u00e1z": "das Krankenhaus",
+  "gy\u00f3gyszert\u00e1r": "die Apotheke",
+  "iskola": "die Schule",
+  "iroda": "das B\u00fcro",
+  "munka": "die Arbeit",
+  "\u00e9rtekezlet": "die Besprechung",
+  "jelent\u00e9s": "der Bericht",
+  "feladat": "die Aufgabe",
+  "hat\u00e1rid\u0151": "die Frist",
+  "projekt": "das Projekt",
+  "telefon": "das Handy",
+  "sz\u00e1m\u00edt\u00f3g\u00e9p": "der Computer",
+  "g\u00e9p": "der Computer",
+  "k\u00e9perny\u0151": "der Bildschirm",
+  "adat": "die Daten",
+  "jelsz\u00f3": "das Passwort",
+  "h\u00e1l\u00f3zat": "das Netzwerk",
+  "id\u0151": "die Zeit",
+  "nap": "der Tag",
+  "Nap": "die Sonne",
+  "reggel": "der Morgen",
+  "este": "der Abend",
+  "h\u00e9t": "die Woche",
+  "h\u00f3nap": "der Monat",
+  "\u00e9v": "das Jahr",
+  "\u00f6tlet": "die Idee",
+  "v\u00e9lem\u00e9ny": "die Meinung",
+  "d\u00f6nt\u00e9s": "die Entscheidung",
+  "probl\u00e9ma": "das Problem",
+  "megold\u00e1s": "die L\u00f6sung",
+  "k\u00e9rd\u00e9s": "die Frage",
+  "v\u00e1lasz": "die Antwort",
+  "ok": "der Grund",
+  "c\u00e9l": "das Ziel",
+  "eredm\u00e9ny": "das Ergebnis",
+  "hiba": "der Fehler",
+  "jav\u00edt\u00e1s": "die Korrektur",
+  "hang": "der Ton",
+  "sz\u00f3": "das Wort",
+  "mondat": "der Satz",
+  "bolt": "das Gesch\u00e4ft",
+  "p\u00e9nz": "das Geld",
+  "\u00e1r": "der Preis",
+  "blokk": "der Kassenbon",
+  "\u00e1llom\u00e1s": "der Bahnhof",
+  "buszmeg\u00e1ll\u00f3": "die Bushaltestelle",
+  "rend\u0151rs\u00e9g": "die Polizei",
+  "m\u00fazeum": "das Museum",
+  "mozi": "das Kino",
+  "sz\u00ednh\u00e1z": "das Theater",
+  "k\u00f6nyvt\u00e1r": "die Bibliothek",
+  "egyetem": "die Universit\u00e4t",
+  "gy\u00e1r": "die Fabrik",
+  "lift": "der Aufzug",
+  "l\u00e9pcs\u0151": "die Treppe",
+  "szia": "hallo",
+  "k\u00f6sz\u00f6n\u00f6m": "danke",
+  "viszl\u00e1t": "auf Wiedersehen",
+  "k\u00e9rem": "bitte",
+  "j\u00f3 reggelt": "Guten Morgen",
+  "besz\u00e9lni": "sprechen",
+  "fogni": "halten",
+  "futni": "laufen",
+  "\u00edrni": "schreiben",
+  "olvasni": "lesen",
+  "enni": "essen",
+  "inni": "trinken",
+  "tanulni": "lernen",
+  "dolgozni": "arbeiten",
+  "venni": "kaufen",
+  "menni": "gehen",
+  "lenni": "sein",
+  "fizetni": "bezahlen",
+  "szeretn\u00e9k": "ich m\u00f6chte"
+};
+const germanByEn = {
+  head: "der Kopf",
+  face: "das Gesicht",
+  eye: "das Auge",
+  hand: "die Hand",
+  arm: "der Arm",
+  leg: "das Bein",
+  foot: "der Fu\u00df",
+  ear: "das Ohr",
+  nose: "die Nase",
+  mouth: "der Mund",
+  tooth: "der Zahn",
+  hair: "das Haar",
+  back: "der R\u00fccken",
+  heart: "das Herz",
+  person: "die Person",
+  man: "der Mann",
+  woman: "die Frau",
+  girl: "das M\u00e4dchen",
+  boy: "der Junge",
+  child: "das Kind",
+  house: "das Haus",
+  water: "das Wasser",
+  food: "das Essen",
+  apple: "der Apfel",
+  book: "das Buch",
+  car: "das Auto",
+  pig: "das Schwein",
+  computer: "der Computer",
+  day: "der Tag",
+  Sun: "die Sonne",
+  door: "die T\u00fcr",
+  window: "das Fenster",
+  table: "der Tisch",
+  chair: "der Stuhl",
+  phone: "das Handy",
+  key: "der Schl\u00fcssel",
+  bread: "das Brot",
+  money: "das Geld",
+  road: "die Stra\u00dfe",
+  street: "die Stra\u00dfe",
+  shop: "das Gesch\u00e4ft",
+  bus: "der Bus",
+  shoe: "der Schuh",
+  coat: "der Mantel",
+  trousers: "die Hose",
+  "T-shirt": "das T-Shirt",
+  mother: "die Mutter",
+  father: "der Vater",
+  family: "die Familie",
+  work: "die Arbeit",
+  school: "die Schule",
+  city: "die Stadt",
+  room: "das Zimmer",
+  clothes: "die Kleidung",
+  ticket: "die Fahrkarte",
+  station: "der Bahnhof",
+  price: "der Preis",
+  receipt: "der Kassenbon",
+  hospital: "das Krankenhaus",
+  pharmacy: "die Apotheke",
+  office: "das B\u00fcro",
+  project: "das Projekt",
+  question: "die Frage",
+  answer: "die Antwort",
+  word: "das Wort",
+  sentence: "der Satz"
+};
+const quickDictionary = [...(window.DICTIONARY_DATA || []), ...builtInDictionary].map(enrichDictionaryEntry);
 const newWordsPerLesson = 8;
 const coreVocabularyLimit = 500;
 const pluralExceptions = {
@@ -87,7 +318,8 @@ const defaultState = {
   settings: {
     dailyWords: 8,
     sound: "on",
-    density: "normal"
+    density: "normal",
+    visibleLanguages: ["en", "es"]
   },
   currentLessonId: "",
   currentStep: 0,
@@ -127,13 +359,19 @@ const elements = {
   known: document.querySelector("#known-count"),
   profileSummary: document.querySelector("#profile-summary"),
   sentenceBoard: document.querySelector("#sentence-board"),
+  sentenceLanguage: document.querySelector("#sentence-language-select"),
+  sentenceLevel: document.querySelector("#sentence-level-select"),
   dailyWordTarget: document.querySelector("#daily-word-target"),
   soundEnabled: document.querySelector("#sound-enabled"),
   lessonDensity: document.querySelector("#lesson-density"),
+  visibleLanguageControls: document.querySelectorAll(".visible-language"),
   nextLevel: document.querySelector("#next-level"),
   verbInput: document.querySelector("#verb-input"),
   verbSearch: document.querySelector("#verb-search"),
-  verbResult: document.querySelector("#verb-result")
+  verbResult: document.querySelector("#verb-result"),
+  verbInputFull: document.querySelector("#verb-input-full"),
+  verbSearchFull: document.querySelector("#verb-search-full"),
+  verbResultFull: document.querySelector("#verb-result-full")
 };
 
 function loadState() {
@@ -151,6 +389,28 @@ function loadState() {
 
 function saveState() {
   localStorage.setItem(storageKey, JSON.stringify(state));
+}
+
+function enrichDictionaryEntry(entry) {
+  return { ...entry, de: entry.de || germanByHu[entry.hu] || germanByEn[entry.en] || "" };
+}
+
+function termForLanguage(entry, languageId) {
+  if (!entry) return "";
+  if (languageId === "de") return entry.de || germanByHu[entry.hu] || germanByEn[entry.en] || "";
+  return entry[languageId] || "";
+}
+
+function comparableTerms(entry, languageId) {
+  const value = termForLanguage(entry, languageId);
+  if (!value) return [];
+  if (languageId !== "de") return [value];
+  return [value, value.replace(/^(der|die|das)\\s+/i, "")];
+}
+
+function visibleTargetLanguages() {
+  const selected = state.settings?.visibleLanguages || defaultState.settings.visibleLanguages;
+  return selected.filter((id) => displayLanguages[id]);
 }
 
 function todayKey() {
@@ -197,6 +457,13 @@ function learningItemsForLesson(lesson) {
 
 function sentenceForItem(item) {
   if (state.level === "a1") {
+    if (state.language === "de") {
+      return {
+        target: `Ich habe ${item.term}`,
+        meaning: `Van nálam: ${item.meaning}`,
+        words: ["Ich", "habe", item.term]
+      };
+    }
     return {
       target: state.language === "es" ? `Tengo ${item.term}` : `I have ${item.term}`,
       meaning: `Van nálam: ${item.meaning}`,
@@ -204,10 +471,24 @@ function sentenceForItem(item) {
     };
   }
   if (state.level === "a2") {
+    if (state.language === "de") {
+      return {
+        target: `Ich brauche ${item.term} heute`,
+        meaning: `Ma szükségem van erre: ${item.meaning}`,
+        words: ["Ich", "brauche", item.term, "heute"]
+      };
+    }
     return {
       target: state.language === "es" ? `Necesito ${item.term} hoy` : `I need ${item.term} today`,
       meaning: `Ma szükségem van erre: ${item.meaning}`,
       words: state.language === "es" ? ["Necesito", item.term, "hoy"] : ["I", "need", item.term, "today"]
+    };
+  }
+  if (state.language === "de") {
+    return {
+      target: `Ich möchte ${item.term} in einem Satz benutzen`,
+      meaning: `Mondatban akarom használni: ${item.meaning}`,
+      words: ["Ich", "möchte", item.term, "in", "einem", "Satz", "benutzen"]
     };
   }
   return {
@@ -268,7 +549,7 @@ function currentStep() {
 
 function optionsFrom(values, answerIndex) {
   const answer = values[answerIndex];
-  return [answer, ...values.filter((_, index) => index !== answerIndex)].slice(0, 4);
+  return shuffle([answer, ...values.filter((_, index) => index !== answerIndex)].slice(0, 4));
 }
 
 function shuffle(values) {
@@ -295,6 +576,20 @@ function renderSelectors() {
     elements.level.appendChild(option);
   });
   elements.level.value = state.level;
+  renderSentenceSelectors();
+}
+
+function renderSentenceSelectors() {
+  if (!elements.sentenceLanguage || !elements.sentenceLevel) return;
+  elements.sentenceLanguage.value = state.language;
+  elements.sentenceLevel.innerHTML = "";
+  Object.entries(activeCourse().levels).forEach(([id, level]) => {
+    const option = document.createElement("option");
+    option.value = id;
+    option.textContent = level.label;
+    elements.sentenceLevel.appendChild(option);
+  });
+  elements.sentenceLevel.value = state.level;
 }
 
 function updateStats() {
@@ -351,6 +646,7 @@ function renderReview() {
   dictionaryRendered = true;
   elements.wordList.innerHTML = "";
   const fragment = document.createDocumentFragment();
+  const languages = visibleTargetLanguages();
   dictionaryGroups().forEach((group) => {
     const section = document.createElement("section");
     section.className = "dictionary-group";
@@ -360,10 +656,9 @@ function renderReview() {
         <span>${group.rows.length} szó</span>
       </div>
       <div class="dictionary-table">
-        <div class="dictionary-row dictionary-row-head">
+        <div class="dictionary-row dictionary-row-head" style="grid-template-columns: ${dictionaryGridColumns(languages)}">
           <span>Magyar</span>
-          <span>Angol</span>
-          <span>Spanyol</span>
+          ${languages.map((languageId) => `<span>${displayLanguages[languageId].label}</span>`).join("")}
         </div>
       </div>
     `;
@@ -371,22 +666,30 @@ function renderReview() {
     group.rows.forEach((item) => {
       const row = document.createElement("div");
       row.className = "dictionary-row";
+      row.style.gridTemplateColumns = dictionaryGridColumns(languages);
       row.innerHTML = `
         <strong>${escapeHtml(item.hu)}</strong>
-        <span class="dict-cell">
-          <span>${escapeHtml(item.en || "-")}</span>
-          ${item.en ? `<button class="icon-button dict-sound" type="button" data-lang="en" data-term="${escapeHtml(item.en)}" aria-label="Angol kiejtés">▶</button>` : ""}
-        </span>
-        <span class="dict-cell">
-          <span>${escapeHtml(item.es || "-")}</span>
-          ${item.es ? `<button class="icon-button dict-sound" type="button" data-lang="es" data-term="${escapeHtml(item.es)}" aria-label="Spanyol kiejtés">▶</button>` : ""}
-        </span>
+        ${languages.map((languageId) => renderDictionaryCell(item, languageId)).join("")}
       `;
       table.appendChild(row);
     });
     fragment.appendChild(section);
   });
   elements.wordList.appendChild(fragment);
+}
+
+function dictionaryGridColumns(languages) {
+  return `minmax(120px, 0.8fr) repeat(${languages.length}, minmax(140px, 1fr))`;
+}
+
+function renderDictionaryCell(item, languageId) {
+  const value = item[languageId] || "";
+  return `
+    <span class="dict-cell">
+      <span>${escapeHtml(value || "-")}</span>
+      ${value ? `<button class="icon-button dict-sound" type="button" data-lang="${languageId}" data-term="${escapeHtml(value)}" aria-label="${displayLanguages[languageId].label} kiejtés">▶</button>` : ""}
+    </span>
+  `;
 }
 
 function sentenceRows() {
@@ -451,8 +754,9 @@ function dictionaryGroups() {
 
   quickDictionary.slice(0, coreVocabularyLimit).forEach((entry) => {
     const category = entry.category || "Alapszótár";
-    addDictionaryEntry(groups, category, termWithPlural(entry, "hu"), "en", termWithPlural(entry, "en"));
-    addDictionaryEntry(groups, category, termWithPlural(entry, "hu"), "es", termWithPlural(entry, "es"));
+    Object.keys(displayLanguages).forEach((languageId) => {
+      addDictionaryEntry(groups, category, termWithPlural(entry, "hu"), languageId, termWithPlural(entry, languageId));
+    });
   });
 
   Object.entries(curriculum).forEach(([languageId, course]) => {
@@ -460,6 +764,8 @@ function dictionaryGroups() {
       level.lessons.forEach((lesson) => {
         lesson.items.forEach((item) => {
           addDictionaryEntry(groups, lesson.title, item.meaning, languageId, item.term);
+          const german = germanByHu[item.meaning];
+          if (german) addDictionaryEntry(groups, lesson.title, item.meaning, "de", german);
         });
       });
     });
@@ -468,7 +774,7 @@ function dictionaryGroups() {
   return [...groups.entries()].map(([title, rows]) => ({
     title,
     rows: [...rows.values()]
-      .filter((row) => row.en || row.es)
+      .filter((row) => Object.keys(displayLanguages).some((languageId) => row[languageId]))
       .sort((a, b) => a.hu.localeCompare(b.hu, "hu"))
   })).filter((group) => group.rows.length);
 }
@@ -477,7 +783,7 @@ function addDictionaryEntry(groups, title, meaning, languageId, term) {
   if (!groups.has(title)) groups.set(title, new Map());
   const rows = groups.get(title);
   const key = normalize(meaning);
-  const existing = rows.get(key) || { hu: meaning, en: "", es: "" };
+  const existing = rows.get(key) || { hu: meaning, en: "", es: "", de: "" };
   existing[languageId] = existing[languageId] || term;
   rows.set(key, existing);
 }
@@ -494,6 +800,7 @@ function showScreen(screenId) {
       "home-screen": "Tanulás",
       "review-screen": "Szavak",
       "sentences-screen": "Mondatok",
+      "verb-screen": "Igeragozás",
       "profile-screen": "Statisztika",
       "settings-screen": "Beállítások"
     }[screenId];
@@ -503,6 +810,7 @@ function showScreen(screenId) {
     "home-screen": "Mai pálya",
     "review-screen": "Szavak",
     "sentences-screen": "Mondatok",
+    "verb-screen": "Igeragozás",
     "profile-screen": "Profil",
     "settings-screen": "Beállítások"
   }[screenId] || "Lecke";
@@ -514,12 +822,35 @@ function renderSettings() {
   elements.dailyWordTarget.value = String(state.settings?.dailyWords || 8);
   elements.soundEnabled.value = state.settings?.sound || "on";
   elements.lessonDensity.value = state.settings?.density || "normal";
+  const visible = new Set(visibleTargetLanguages());
+  elements.visibleLanguageControls.forEach((control) => {
+    control.checked = visible.has(control.value);
+  });
 }
 
 function updateSetting(key, value) {
   state.settings = { ...defaultState.settings, ...(state.settings || {}), [key]: value };
   saveState();
   refresh();
+}
+
+function updateVisibleLanguages() {
+  const values = [...elements.visibleLanguageControls]
+    .filter((control) => control.checked)
+    .map((control) => control.value);
+  state.settings = {
+    ...defaultState.settings,
+    ...(state.settings || {}),
+    visibleLanguages: values.length ? values : ["en"]
+  };
+  dictionaryRendered = false;
+  saveState();
+  if (document.querySelector("#review-screen").classList.contains("active")) renderReview();
+  if (document.querySelector("#verb-screen").classList.contains("active") && elements.verbResultFull.innerHTML.trim()) {
+    elements.verbInput.value = elements.verbInputFull.value;
+    searchVerb();
+    elements.verbResultFull.innerHTML = elements.verbResult.innerHTML;
+  }
 }
 
 function startLesson(id) {
@@ -739,7 +1070,7 @@ function speakIn(text, languageId) {
   if (!("speechSynthesis" in window)) return;
   const spokenText = String(text).split(" / ")[0];
   const utterance = new SpeechSynthesisUtterance(spokenText);
-  utterance.lang = curriculum[languageId]?.speakLang || activeCourse().speakLang;
+  utterance.lang = displayLanguages[languageId]?.speakLang || curriculum[languageId]?.speakLang || activeCourse().speakLang;
   utterance.rate = 0.9;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
@@ -792,7 +1123,8 @@ function pluralFor(entry, languageId) {
   if (!entry || entry.type === "verb") return "";
   const explicit = entry[`${languageId}Plural`];
   if (explicit) return explicit;
-  if (entry.noPlural || entry[languageId] === "Sun" || entry[languageId] === "Sol" || entry.hu === "Nap") return "";
+  if (languageId === "de") return "";
+  if (entry.noPlural || termForLanguage(entry, languageId) === "Sun" || termForLanguage(entry, languageId) === "Sol" || entry.hu === "Nap") return "";
   if (languageId === "hu") return pluralizeHu(entry.hu);
   if (languageId === "en") return pluralizeEn(entry.en);
   if (languageId === "es") return pluralizeEs(entry.es);
@@ -800,7 +1132,7 @@ function pluralFor(entry, languageId) {
 }
 
 function termWithPlural(entry, languageId) {
-  const singular = entry?.[languageId] || "";
+  const singular = termForLanguage(entry, languageId);
   const plural = pluralFor(entry, languageId);
   return plural ? `${singular} / ${plural}` : singular;
 }
@@ -833,9 +1165,10 @@ function findCurriculumItemByMeaning(languageId, meaning) {
 function findQuickEntry(query) {
   const rawQuery = query.trim();
   if (!rawQuery) return undefined;
+  const dictionaryKeys = ["hu", ...Object.keys(displayLanguages)];
   const exact = quickDictionary.find((entry) =>
-    ["hu", "en", "es"].some((key) => entry[key] === rawQuery)
-      || ["hu", "en", "es"].some((key) => {
+    dictionaryKeys.some((key) => comparableTerms(entry, key).some((term) => term === rawQuery))
+      || dictionaryKeys.some((key) => {
         const plural = pluralFor(entry, key);
         return plural && plural === rawQuery;
       })
@@ -846,8 +1179,8 @@ function findQuickEntry(query) {
   const normalizedQuery = normalize(query);
   const exactQuery = query.trim().toLowerCase();
   return quickDictionary.find((entry) =>
-    ["hu", "en", "es"].some((key) => normalize(entry[key]) === normalizedQuery)
-      || ["hu", "en", "es"].some((key) => {
+    dictionaryKeys.some((key) => comparableTerms(entry, key).some((term) => normalize(term) === normalizedQuery))
+      || dictionaryKeys.some((key) => {
         const plural = pluralFor(entry, key);
         return plural && normalize(plural) === normalizedQuery;
       })
@@ -920,6 +1253,36 @@ function spanishRegularForms(infinitive) {
   };
 }
 
+const germanIrregularForms = {
+  sein: ["bin", "bist", "ist", "sind", "seid", "sind"],
+  haben: ["habe", "hast", "hat", "haben", "habt", "haben"],
+  werden: ["werde", "wirst", "wird", "werden", "werdet", "werden"],
+  gehen: ["gehe", "gehst", "geht", "gehen", "geht", "gehen"],
+  essen: ["esse", "isst", "isst", "essen", "esst", "essen"],
+  lesen: ["lese", "liest", "liest", "lesen", "lest", "lesen"],
+  sprechen: ["spreche", "sprichst", "spricht", "sprechen", "sprecht", "sprechen"],
+  laufen: ["laufe", "läufst", "läuft", "laufen", "lauft", "laufen"]
+};
+
+function germanRegularForms(infinitive) {
+  const lower = infinitive.toLowerCase();
+  if (!/^[a-zäöüß]+(en|n)$/i.test(lower)) return null;
+  if (germanIrregularForms[lower]) return { infinitive, present: germanIrregularForms[lower] };
+  const stem = lower.endsWith("en") ? infinitive.slice(0, -2) : infinitive.slice(0, -1);
+  const needsE = /[td]$/i.test(stem);
+  return {
+    infinitive,
+    present: [
+      `${stem}e`,
+      `${stem}${needsE ? "est" : "st"}`,
+      `${stem}${needsE ? "et" : "t"}`,
+      `${stem}en`,
+      `${stem}${needsE ? "et" : "t"}`,
+      `${stem}en`
+    ]
+  };
+}
+
 function looksLikeHungarianVerb(meaning) {
   if (!meaning) return true;
   return normalize(meaning)
@@ -961,6 +1324,25 @@ function buildSpanishResult(infinitive, meaning, irregularEntry) {
       ["Jövő idő", forms.future],
       ["Gerundio", forms.gerund],
       ["Participio", forms.participle]
+    ]
+  };
+}
+
+function buildGermanResult(infinitive, meaning) {
+  const forms = germanRegularForms(infinitive);
+  if (!forms) return null;
+  return {
+    language: "Német",
+    title: `${forms.infinitive} - ${meaning || "német ige"}`,
+    note: germanIrregularForms[infinitive.toLowerCase()] ? "Gyakori rendhagyó/tőváltó ige." : "Német jelen idejű ragozás.",
+    rows: [
+      ["Főnévi igenév", forms.infinitive],
+      ["ich", forms.present[0]],
+      ["du", forms.present[1]],
+      ["er/sie/es", forms.present[2]],
+      ["wir", forms.present[3]],
+      ["ihr", forms.present[4]],
+      ["sie/Sie", forms.present[5]]
     ]
   };
 }
@@ -1053,24 +1435,23 @@ function resolveVerbMeaning(query) {
 function analyzeVerbStrict(languageId, query, sharedMeaning) {
   const quickEntry = sharedMeaning ? findQuickEntry(sharedMeaning) : findQuickEntry(query);
   if (quickEntry?.type === "verb") {
-    const candidate = quickEntry[languageId];
+    const candidate = termForLanguage(quickEntry, languageId);
     const candidateIrregular = candidate ? findIrregular(languageId, candidate) : null;
     if (candidateIrregular) {
       const [base, entry] = candidateIrregular;
-      return languageId === "en"
-        ? buildEnglishResult(base, quickEntry.hu, entry)
-        : buildSpanishResult(base, quickEntry.hu, entry);
+      if (languageId === "en") return buildEnglishResult(base, quickEntry.hu, entry);
+      if (languageId === "es") return buildSpanishResult(base, quickEntry.hu, entry);
     }
     if (languageId === "en" && candidate) return buildEnglishResult(candidate, quickEntry.hu, null);
     if (languageId === "es" && candidate) return buildSpanishResult(candidate, quickEntry.hu, null);
+    if (languageId === "de" && candidate) return buildGermanResult(candidate, quickEntry.hu);
   }
 
   const irregular = findIrregular(languageId, query) || (sharedMeaning ? findIrregular(languageId, sharedMeaning) : null);
   if (irregular) {
     const [base, entry] = irregular;
-    return languageId === "en"
-      ? buildEnglishResult(base, entry.meaning, entry)
-      : buildSpanishResult(base, entry.meaning, entry);
+    if (languageId === "en") return buildEnglishResult(base, entry.meaning, entry);
+    if (languageId === "es") return buildSpanishResult(base, entry.meaning, entry);
   }
 
   const curriculumItem = sharedMeaning
@@ -1087,12 +1468,16 @@ function analyzeVerbStrict(languageId, query, sharedMeaning) {
     if (curriculumItem && !looksLikeHungarianVerb(knownMeaning)) return null;
     return buildSpanishResult(candidate.toLowerCase(), knownMeaning || spanishRegularMeaning(candidate), null);
   }
+  if (languageId === "de" && (curriculumItem || germanRegularForms(candidate)) && /^[a-zäöüß]+(en|n)$/i.test(candidate)) {
+    if (curriculumItem && !looksLikeHungarianVerb(knownMeaning)) return null;
+    return buildGermanResult(candidate.toLowerCase(), knownMeaning || germanRegularMeaning(candidate));
+  }
   return null;
 }
 
 function renderVerbCard(result) {
   const base = result.title.split(" - ")[0];
-  const tenseLabel = result.language === "Angol" ? "present simple" : "presente";
+  const tenseLabel = result.language === "Angol" ? "present simple" : result.language === "Spanyol" ? "presente" : "Präsens";
   return `
     <article class="verb-card">
       <div class="verb-result-head">
@@ -1123,6 +1508,16 @@ function verbDisplayRows(result) {
       { value: `He/She/It ${third || base}`, highlight: true },
       { value: `We ${lookup["Egyszerű jelen: I/you/we/they"] || base}` },
       { value: `They ${lookup["Egyszerű jelen: I/you/we/they"] || base}` }
+    ];
+  }
+  if (result.language === "Német") {
+    return [
+      { value: `ich ${lookup.ich || ""}` },
+      { value: `du ${lookup.du || ""}` },
+      { value: `er/sie/es ${lookup["er/sie/es"] || ""}`, highlight: true },
+      { value: `wir ${lookup.wir || ""}` },
+      { value: `ihr ${lookup.ihr || ""}` },
+      { value: `sie/Sie ${lookup["sie/Sie"] || ""}` }
     ];
   }
 
@@ -1160,6 +1555,28 @@ function spanishRegularMeaning(infinitive) {
   }[normalize(infinitive)] || "";
 }
 
+function germanRegularMeaning(infinitive) {
+  return {
+    gehen: "menni",
+    essen: "enni",
+    trinken: "inni",
+    kaufen: "venni",
+    brauchen: "szüksége van",
+    haben: "birtokolni / van neki",
+    sein: "lenni",
+    lernen: "tanulni",
+    sprechen: "beszélni",
+    halten: "fogni",
+    laufen: "futni",
+    schreiben: "írni",
+    lesen: "olvasni",
+    arbeiten: "dolgozni",
+    bezahlen: "fizetni",
+    wohnen: "lakni",
+    kommen: "jönni"
+  }[normalize(infinitive)] || "";
+}
+
 function resolveWordMeaning(query) {
   const quickEntry = findQuickEntry(query);
   if (quickEntry) return quickEntry.hu;
@@ -1183,6 +1600,7 @@ function findIrregularByMeaning(languageId, meaning) {
 function findTranslationTerm(languageId, meaning, query) {
   const quickEntry = findQuickEntry(query) || findQuickEntry(meaning);
   if (quickEntry) return termWithPlural(quickEntry, languageId);
+  if (!curriculum[languageId]) return "";
 
   const direct = findCurriculumItem(languageId, query);
   if (direct && meaningMatches(direct.meaning, meaning)) return direct.term;
@@ -1196,10 +1614,14 @@ function findTranslationTerm(languageId, meaning, query) {
 
 function renderTranslationSummary(meaning, results) {
   const quickEntry = findQuickEntry(elements.verbInput.value.trim()) || findQuickEntry(meaning);
-  const en = findTranslationTerm("en", meaning, elements.verbInput.value.trim());
-  const es = findTranslationTerm("es", meaning, elements.verbInput.value.trim());
   const hu = quickEntry ? termWithPlural(quickEntry, "hu") : meaning;
-  if (!meaning && !en && !es) return "";
+  const languageTerms = visibleTargetLanguages().map((languageId) => ({
+    languageId,
+    value: findTranslationTerm(languageId, meaning, elements.verbInput.value.trim())
+      || results.find((item) => item.language === displayLanguages[languageId].label)?.title.split(" - ")[0]
+      || ""
+  }));
+  if (!meaning && !languageTerms.some((item) => item.value)) return "";
 
   return `
     <div class="translation-summary">
@@ -1207,14 +1629,12 @@ function renderTranslationSummary(meaning, results) {
         <span>Magyar</span>
         <strong>${escapeHtml(hu || "-")}</strong>
       </div>
-      <div>
-        <span>Angol</span>
-        <strong>${escapeHtml(en || results.find((item) => item.language === "Angol")?.title.split(" - ")[0] || "-")}</strong>
-      </div>
-      <div>
-        <span>Spanyol</span>
-        <strong>${escapeHtml(es || results.find((item) => item.language === "Spanyol")?.title.split(" - ")[0] || "-")}</strong>
-      </div>
+      ${languageTerms.map((item) => `
+        <div>
+          <span>${displayLanguages[item.languageId].label}</span>
+          <strong>${escapeHtml(item.value || "-")}</strong>
+        </div>
+      `).join("")}
     </div>
   `;
 }
@@ -1228,12 +1648,12 @@ function verbTitleForQuery(query, results) {
 function searchVerb() {
   const query = elements.verbInput.value.trim();
   if (!query) {
-    elements.verbResult.textContent = "Írj be egy szót, például: fej, head, cabeza, menni, go, ir.";
+    elements.verbResult.textContent = "Írj be egy szót, például: fej, head, cabeza, Kopf, menni, go, ir.";
     return;
   }
 
   const sharedMeaning = resolveVerbMeaning(query) || resolveWordMeaning(query);
-  const results = ["en", "es"]
+  const results = verbResultLanguages()
     .map((languageId) => analyzeVerbStrict(languageId, query, sharedMeaning))
     .filter(Boolean);
 
@@ -1242,7 +1662,7 @@ function searchVerb() {
   if (!results.length && !translationSummary) {
     elements.verbResult.innerHTML = `
       <strong>Nincs biztos találat.</strong>
-      <span>Próbáld magyarul, angolul vagy spanyolul: <b>fej</b>, <b>head</b>, <b>cabeza</b>, <b>menni</b>, <b>go</b>, <b>ir</b>.</span>
+      <span>Próbáld magyarul, angolul, spanyolul vagy németül: <b>fej</b>, <b>head</b>, <b>cabeza</b>, <b>Kopf</b>, <b>menni</b>, <b>go</b>, <b>ir</b>.</span>
     `;
     return;
   }
@@ -1256,6 +1676,11 @@ function searchVerb() {
       </div>
     ` : `<span>Ez nem ige, ezért csak fordítást mutatok.</span>`}
   `;
+}
+
+function verbResultLanguages() {
+  return [...new Set([...visibleTargetLanguages(), state.language, "en", "es"])]
+    .filter((languageId) => ["en", "es", "de"].includes(languageId));
 }
 
 function refresh() {
@@ -1285,6 +1710,23 @@ elements.level.addEventListener("change", () => {
   showScreen("home-screen");
 });
 
+elements.sentenceLanguage.addEventListener("change", () => {
+  state.language = elements.sentenceLanguage.value;
+  state.level = Object.keys(activeCourse().levels)[0];
+  state.currentLessonId = "";
+  saveState();
+  refresh();
+  renderSentences();
+});
+
+elements.sentenceLevel.addEventListener("change", () => {
+  state.level = elements.sentenceLevel.value;
+  state.currentLessonId = "";
+  saveState();
+  refresh();
+  renderSentences();
+});
+
 document.querySelector("#back-home").addEventListener("click", () => showScreen("home-screen"));
 document.querySelector("#speak-task").addEventListener("click", () => speak(currentStep().answer || currentStep().term));
 elements.skip.addEventListener("click", skipTask);
@@ -1309,6 +1751,9 @@ document.querySelector("#refresh-sentences").addEventListener("click", renderSen
 elements.dailyWordTarget.addEventListener("change", () => updateSetting("dailyWords", Number(elements.dailyWordTarget.value)));
 elements.soundEnabled.addEventListener("change", () => updateSetting("sound", elements.soundEnabled.value));
 elements.lessonDensity.addEventListener("change", () => updateSetting("density", elements.lessonDensity.value));
+elements.visibleLanguageControls.forEach((control) => {
+  control.addEventListener("change", updateVisibleLanguages);
+});
 elements.wordList.addEventListener("click", (event) => {
   const button = event.target.closest(".dict-sound");
   if (!button) return;
@@ -1317,6 +1762,17 @@ elements.wordList.addEventListener("click", (event) => {
 elements.verbSearch.addEventListener("click", searchVerb);
 elements.verbInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") searchVerb();
+});
+elements.verbSearchFull.addEventListener("click", () => {
+  elements.verbInput.value = elements.verbInputFull.value;
+  searchVerb();
+  elements.verbResultFull.innerHTML = elements.verbResult.innerHTML;
+});
+elements.verbInputFull.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter") return;
+  elements.verbInput.value = elements.verbInputFull.value;
+  searchVerb();
+  elements.verbResultFull.innerHTML = elements.verbResult.innerHTML;
 });
 
 if ("serviceWorker" in navigator) {

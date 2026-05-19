@@ -9,7 +9,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon-192.png">
-  <link rel="stylesheet" href="styles.css?v=36">
+  <link rel="stylesheet" href="styles.css?v=42">
 </head>
 <body>
   <div class="app-shell">
@@ -20,7 +20,7 @@
           <span>ñ</span>
         </div>
         <strong>Igeragozás</strong>
-        <small>Angol + Spanyol</small>
+        <small>Angol + Spanyol + Német</small>
       </div>
 
       <nav class="side-nav">
@@ -36,7 +36,7 @@
           <span aria-hidden="true">▥</span>
           <small>Mondatok</small>
         </button>
-        <button class="nav-button" type="button" data-screen="home-screen" aria-label="Igeragozás">
+        <button class="nav-button" type="button" data-screen="verb-screen" aria-label="Igeragozás">
           <span aria-hidden="true">abc</span>
           <small>Igeragozás</small>
         </button>
@@ -85,6 +85,7 @@
                   <select id="language-select">
                     <option value="en">Angol</option>
                     <option value="es">Spanyol</option>
+                    <option value="de">Német</option>
                   </select>
                 </label>
                 <label>
@@ -208,7 +209,41 @@
               </div>
               <button class="text-button" id="refresh-sentences" type="button">Frissítés</button>
             </div>
+            <div class="control-row compact-control" aria-label="Mondat nyelv és szint">
+              <label>
+                <span>Nyelv</span>
+                <select id="sentence-language-select">
+                  <option value="en">Angol</option>
+                  <option value="es">Spanyol</option>
+                  <option value="de">Német</option>
+                </select>
+              </label>
+              <label>
+                <span>Szint</span>
+                <select id="sentence-level-select"></select>
+              </label>
+            </div>
             <div class="sentence-board" id="sentence-board"></div>
+          </div>
+        </section>
+
+        <section class="screen" id="verb-screen" aria-labelledby="verb-full-heading">
+          <div class="settings-shell">
+            <section class="verb-panel" aria-labelledby="verb-full-heading">
+              <div class="section-head">
+                <div>
+                  <p class="eyebrow">Szó- és igeidő kereső</p>
+                  <h1 id="verb-full-heading">Igeragozás</h1>
+                </div>
+              </div>
+              <div class="verb-search">
+                <input id="verb-input-full" type="text" autocomplete="off" placeholder="pl. menni, go, ir, gehen">
+                <button class="primary-button" id="verb-search-full" type="button">Keresés</button>
+              </div>
+              <div class="verb-result" id="verb-result-full" aria-live="polite">
+                Írj be magyarul, angolul, spanyolul vagy németül. Ha ige, igeidőt is mutatok.
+              </div>
+            </section>
           </div>
         </section>
 
@@ -268,6 +303,12 @@
                   <option value="dense">Több ismétlés</option>
                 </select>
               </label>
+              <fieldset class="setting-card language-settings">
+                <legend>Megjelenített nyelvek</legend>
+                <label><input class="visible-language" type="checkbox" value="en"> Angol</label>
+                <label><input class="visible-language" type="checkbox" value="es"> Spanyol</label>
+                <label><input class="visible-language" type="checkbox" value="de"> Német</label>
+              </fieldset>
             </div>
           </div>
         </section>
@@ -275,10 +316,10 @@
     </div>
   </div>
 
-  <script src="curriculum.js?v=36"></script>
-  <script src="verb-data.js?v=36"></script>
-  <script src="dictionary-data.js?v=36"></script>
-  <script src="app.js?v=36"></script>
+  <script src="curriculum.js?v=42"></script>
+  <script src="verb-data.js?v=42"></script>
+  <script src="dictionary-data.js?v=42"></script>
+  <script src="app.js?v=42"></script>
 </body>
 </html>
 

@@ -433,6 +433,139 @@ window.CURRICULUM = {
   });
 })();
 
+(function addGermanStarterCourse() {
+  window.CURRICULUM.de = {
+    name: "N\u00e9met",
+    speakLang: "de-DE",
+    levels: {
+      a1: {
+        label: "A1 Kezd\u0151",
+        title: "A1 n\u00e9met: val\u00f3di napi alapok",
+        lessons: [
+          {
+            id: "de-a1-daily-essentials",
+            title: "Napi alapok",
+            icon: "DA",
+            summary: "Schuh, Mantel, Brot",
+            items: [
+              { term: "der Schuh", meaning: "cip\u0151", example: "Der Schuh ist hier." },
+              { term: "der Mantel", meaning: "kab\u00e1t", example: "Ich brauche den Mantel." },
+              { term: "die Hose", meaning: "nadr\u00e1g", example: "Die Hose ist blau." },
+              { term: "das T-Shirt", meaning: "p\u00f3l\u00f3", example: "Das T-Shirt ist sauber." },
+              { term: "das Brot", meaning: "keny\u00e9r", example: "Ich kaufe Brot." },
+              { term: "das Wasser", meaning: "v\u00edz", example: "Ich trinke Wasser." },
+              { term: "das Geld", meaning: "p\u00e9nz", example: "Ich habe Geld." },
+              { term: "das Handy", meaning: "telefon", example: "Mein Handy ist hier." }
+            ],
+            sentences: [
+              { target: "Ich brauche den Mantel", meaning: "Sz\u00fcks\u00e9gem van a kab\u00e1tra", words: ["Ich", "brauche", "den", "Mantel"] },
+              { target: "Ich kaufe Brot", meaning: "Kenyeret veszek", words: ["Ich", "kaufe", "Brot"] },
+              { target: "Ich trinke Wasser", meaning: "Vizet iszom", words: ["Ich", "trinke", "Wasser"] }
+            ]
+          },
+          {
+            id: "de-a1-daily-places",
+            title: "Napi helyzetek",
+            icon: "DL",
+            summary: "T\u00fcr, Schl\u00fcssel, Bus",
+            items: [
+              { term: "die T\u00fcr", meaning: "ajt\u00f3", example: "Die T\u00fcr ist offen." },
+              { term: "der Schl\u00fcssel", meaning: "kulcs", example: "Hier ist der Schl\u00fcssel." },
+              { term: "der Tisch", meaning: "asztal", example: "Das Handy ist auf dem Tisch." },
+              { term: "der Stuhl", meaning: "sz\u00e9k", example: "Der Stuhl ist hier." },
+              { term: "das Auto", meaning: "aut\u00f3", example: "Das Auto ist drau\u00dfen." },
+              { term: "die Stra\u00dfe", meaning: "\u00fat", example: "Die Stra\u00dfe ist lang." },
+              { term: "das Gesch\u00e4ft", meaning: "bolt", example: "Das Gesch\u00e4ft ist offen." },
+              { term: "der Bus", meaning: "busz", example: "Der Bus ist hier." }
+            ],
+            sentences: [
+              { target: "Hier ist der Schl\u00fcssel", meaning: "Itt a kulcs", words: ["Hier", "ist", "der", "Schl\u00fcssel"] },
+              { target: "Das Gesch\u00e4ft ist offen", meaning: "A bolt nyitva van", words: ["Das", "Gesch\u00e4ft", "ist", "offen"] },
+              { target: "Der Bus ist hier", meaning: "Itt van a busz", words: ["Der", "Bus", "ist", "hier"] }
+            ]
+          },
+          {
+            id: "de-a1-greetings",
+            title: "K\u00f6sz\u00f6n\u00e9sek",
+            icon: "HI",
+            summary: "Hallo, danke, bitte",
+            items: [
+              { term: "hallo", meaning: "szia", example: "Hallo, Anna." },
+              { term: "danke", meaning: "k\u00f6sz\u00f6n\u00f6m", example: "Danke, Peter." },
+              { term: "bitte", meaning: "k\u00e9rem", example: "Kaffee, bitte." },
+              { term: "guten Morgen", meaning: "j\u00f3 reggelt", example: "Guten Morgen, Tom." },
+              { term: "auf Wiedersehen", meaning: "viszl\u00e1t", example: "Auf Wiedersehen." }
+            ],
+            sentences: [
+              { target: "Guten Morgen", meaning: "J\u00f3 reggelt", words: ["Guten", "Morgen"] },
+              { target: "Kaffee bitte", meaning: "K\u00e1v\u00e9t k\u00e9rek", words: ["Kaffee", "bitte"] }
+            ]
+          },
+          {
+            id: "de-a1-family",
+            title: "Csal\u00e1d",
+            icon: "FA",
+            summary: "Mutter, Vater, Familie",
+            items: [
+              { term: "die Mutter", meaning: "anya", example: "Meine Mutter ist hier." },
+              { term: "der Vater", meaning: "apa", example: "Mein Vater ist zu Hause." },
+              { term: "die Schwester", meaning: "l\u00e1nytestv\u00e9r", example: "Meine Schwester ist nett." },
+              { term: "der Bruder", meaning: "fi\u00fatestv\u00e9r", example: "Mein Bruder ist gro\u00df." },
+              { term: "die Familie", meaning: "csal\u00e1d", example: "Meine Familie ist klein." }
+            ],
+            sentences: [
+              { target: "Meine Familie ist klein", meaning: "A csal\u00e1dom kicsi", words: ["Meine", "Familie", "ist", "klein"] },
+              { target: "Meine Mutter ist hier", meaning: "Anyuk\u00e1m itt van", words: ["Meine", "Mutter", "ist", "hier"] }
+            ]
+          },
+          {
+            id: "de-a1-basic-verbs",
+            title: "Alap ig\u00e9k",
+            icon: "VE",
+            summary: "gehen, essen, trinken",
+            items: [
+              { term: "gehen", meaning: "menni", example: "Ich gehe nach Hause." },
+              { term: "essen", meaning: "enni", example: "Ich esse Brot." },
+              { term: "trinken", meaning: "inni", example: "Ich trinke Wasser." },
+              { term: "kaufen", meaning: "venni", example: "Ich kaufe Brot." },
+              { term: "brauchen", meaning: "sz\u00fcks\u00e9ge van", example: "Ich brauche den Schl\u00fcssel." },
+              { term: "haben", meaning: "birtokolni / van neki", example: "Ich habe ein Handy." },
+              { term: "sein", meaning: "lenni", example: "Ich bin hier." },
+              { term: "lernen", meaning: "tanulni", example: "Ich lerne Deutsch." }
+            ],
+            sentences: [
+              { target: "Ich gehe nach Hause", meaning: "Hazamegyek", words: ["Ich", "gehe", "nach", "Hause"] },
+              { target: "Ich lerne Deutsch", meaning: "N\u00e9met\u00fcl tanulok", words: ["Ich", "lerne", "Deutsch"] },
+              { target: "Ich brauche den Schl\u00fcssel", meaning: "Sz\u00fcks\u00e9gem van a kulcsra", words: ["Ich", "brauche", "den", "Schl\u00fcssel"] }
+            ]
+          },
+          {
+            id: "de-a1-shop",
+            title: "Bolt",
+            icon: "SH",
+            summary: "Preis, billig, teuer",
+            items: [
+              { term: "der Preis", meaning: "\u00e1r", example: "Was ist der Preis?" },
+              { term: "billig", meaning: "olcs\u00f3", example: "Das ist billig." },
+              { term: "teuer", meaning: "dr\u00e1ga", example: "Das ist teuer." },
+              { term: "ich m\u00f6chte", meaning: "szeretn\u00e9k", example: "Ich m\u00f6chte Brot." },
+              { term: "bezahlen", meaning: "fizetni", example: "Ich m\u00f6chte bezahlen." }
+            ],
+            sentences: [
+              { target: "Was ist der Preis", meaning: "Mennyi az \u00e1ra?", words: ["Was", "ist", "der", "Preis"] },
+              { target: "Ich m\u00f6chte Brot", meaning: "Kenyeret szeretn\u00e9k", words: ["Ich", "m\u00f6chte", "Brot"] }
+            ]
+          }
+        ]
+      },
+      a2: { label: "A2 Alap", title: "A2 n\u00e9met: napi helyzetek", lessons: [] },
+      b1: { label: "B1 K\u00f6z\u00e9p", title: "B1 n\u00e9met: v\u00e9lem\u00e9ny \u00e9s tervek", lessons: [] },
+      b2: { label: "B2 Halad\u00f3", title: "B2 n\u00e9met: \u00e1rnyaltabb besz\u00e9d", lessons: [] },
+      c1: { label: "C szint", title: "C szint\u0171 n\u00e9met: prec\u00edz fogalmaz\u00e1s", lessons: [] }
+    }
+  };
+})();
+
 (function prioritizeDailyA1Vocabulary() {
   const dailyLessons = {
     en: [
