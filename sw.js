@@ -1,8 +1,9 @@
-const cacheName = "angol-edzo-v42";
+const cacheName = "angol-edzo-v43";
 const filesToCache = [
   "./",
   "./index.html",
   "./curriculum.js",
+  "./sentence-course.js",
   "./verb-data.js",
   "./dictionary-data.js",
   "./styles.css",

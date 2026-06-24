@@ -499,6 +499,37 @@ function sentenceForItem(item) {
       : ["I", "want", "to", "use", item.term, "in", "a", "sentence"]
   };
 }
+
+function sentenceWords(target) {
+  return String(target).replace(/[?.!,]/g, "").split(/\s+/).filter(Boolean);
+}
+
+function structuredSentenceEntries(lesson) {
+  const direct = (lesson.sentences || []).map((sentence) => ({
+    target: sentence.target,
+    meaning: sentence.meaning,
+    words: sentence.words || sentenceWords(sentence.target)
+  }));
+  const examples = (lesson.exampleSentences || []).map((sentence) => ({
+    target: sentence.target,
+    meaning: sentence.meaning,
+    words: sentence.words || sentenceWords(sentence.target)
+  }));
+  const wordOrders = (lesson.wordOrderTasks || []).map((task) => ({
+    target: task.target,
+    meaning: task.meaning,
+    words: task.words || sentenceWords(task.target)
+  }));
+  const dialogues = (lesson.miniDialogues || []).flatMap((dialogue) =>
+    (dialogue.lines || []).filter((line) => line.target).map((line) => ({
+      target: line.target,
+      meaning: line.meaning,
+      words: sentenceWords(line.target)
+    }))
+  );
+  return [...direct, ...examples, ...wordOrders, ...dialogues];
+}
+
 function lessonSteps(lesson) {
   const items = learningItemsForLesson(lesson);
   const learn = items.map((item) => ({ type: "learn", ...item }));
@@ -508,9 +539,10 @@ function lessonSteps(lesson) {
     answer: item.meaning,
     options: optionsFrom(items.map((row) => row.meaning), index)
   }));
+  const structuredSentences = structuredSentenceEntries(lesson);
   const sentencePool = [
-    ...(lesson.sentences || []),
-    ...items.slice(0, Math.max(0, 4 - (lesson.sentences || []).length)).map(sentenceForItem)
+    ...structuredSentences,
+    ...items.slice(0, Math.max(0, 4 - structuredSentences.length)).map(sentenceForItem)
   ].slice(0, 4);
   const builds = sentencePool.map((sentence) => ({
     type: "build",
@@ -695,7 +727,7 @@ function renderDictionaryCell(item, languageId) {
 function sentenceRows() {
   const rows = [];
   activeLessons().forEach((lesson) => {
-    (lesson.sentences || []).forEach((sentence) => {
+    structuredSentenceEntries(lesson).forEach((sentence) => {
       rows.push({ ...sentence, lessonTitle: lesson.title });
     });
     lesson.items.slice(0, 3).forEach((item) => {
