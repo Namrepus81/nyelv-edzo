@@ -1,4 +1,4 @@
-const cacheName = "angol-edzo-v43";
+const cacheName = "angol-edzo-v44";
 const filesToCache = [
   "./",
   "./index.html",
